@@ -16,7 +16,6 @@ Note: You need to install make on Mac using command line developer tools.
 <pre>
 make installkpsclient
 make build
-#TBD make test
 make install
 </pre>
 
