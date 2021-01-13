@@ -78,7 +78,7 @@ func resourceApplicationCreate(ctx context.Context, d *schema.ResourceData, m in
 	application.Name = &applicationName
 	application.EdgeIDs = applicationEdgeIDs
 	application.PackagingType = HELMPACKAINGTYPE
-	application.ProjectID = applicationProjectID
+	application.ProjectID = &applicationProjectID
 	utils.PrintToJSON(application, "application: ")
 	applicationString, err := applicationToString(application)
 	if err != nil {

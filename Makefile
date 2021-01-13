@@ -3,7 +3,7 @@ HOSTNAME=hashicorp.com
 NAMESPACE=nutanix
 NAME=nutanixkps
 BINARY=terraform-provider-${NAME}
-VERSION=0.1
+VERSION=v0.0.1
 OS_ARCH=darwin_amd64
 
 default: install
@@ -14,7 +14,7 @@ build:
 installkpsclient:
 	mkdir -p ./generated/kps_cloud_api_swagger
 	mkdir -p ./bin
-	curl -o ./generated/kps_api.json https://karbon.nutanix.com/kps_api.json
+	curl -o ./generated/kps_api.json https://karbon.nutanix.com/kps_api_full.json
 	curl -o ./bin/swagger -L'#' https://github.com/go-swagger/go-swagger/releases/download/v0.21.0/swagger_darwin_amd64
 	chmod +x ./bin/swagger
 	./bin/swagger generate client -t ./generated/kps_cloud_api_swagger -f ./generated/kps_api.json -A sherlock
