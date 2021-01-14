@@ -8,8 +8,8 @@ The Terraform Karbon Platform Services provider is a plugin to run the lifecycle
 
 ## Quick Starts
 
-- [Homepage](https://www.terraform.io/docs/providers/nutanixkps/index.html)
-- [Usage examples](examples/)
+- [Homepage](https://registry.terraform.io/providers/nutanix/nutanixkps/latest)
+- [Usage examples](https://registry.terraform.io/providers/nutanix/nutanixkps/latest/documentation)
 
 ## Building on Mac? 
 Note: You need to install make on Mac using command line developer tools.
