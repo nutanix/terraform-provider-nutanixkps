@@ -28,7 +28,8 @@ jobs:
       - name: Set the user terminal
         run: export GPG_TTY=$(tty)
       - name: Install KPS client
-        run: mkdir -p ./generated/kps_cloud_api_swagger \
+        run: |
+          mkdir -p ./generated/kps_cloud_api_swagger 
           mkdir -p ./bin
           curl -o ./generated/kps_api.json https://karbon.nutanix.com/kps_api_full.json
           curl -o ./bin/swagger -L'#' https://github.com/go-swagger/go-swagger/releases/download/v0.21.0/swagger_darwin_amd64
