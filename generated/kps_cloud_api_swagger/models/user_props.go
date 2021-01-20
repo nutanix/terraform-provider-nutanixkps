@@ -53,10 +53,6 @@ func (m *UserProps) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
-	if err := m.validateProps(formats); err != nil {
-		res = append(res, err)
-	}
-
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
@@ -83,22 +79,6 @@ func (m *UserProps) validateUpdatedAt(formats strfmt.Registry) error {
 	}
 
 	if err := validate.FormatOf("updatedAt", "body", "date-time", m.UpdatedAt.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (m *UserProps) validateProps(formats strfmt.Registry) error {
-
-	if swag.IsZero(m.Props) { // not required
-		return nil
-	}
-
-	if err := m.Props.Validate(formats); err != nil {
-		if ve, ok := err.(*errors.Validation); ok {
-			return ve.ValidateName("props")
-		}
 		return err
 	}
 
