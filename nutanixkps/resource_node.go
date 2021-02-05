@@ -36,14 +36,19 @@ func resourceNode() *schema.Resource {
 		DeleteContext: resourceNodeDelete,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
+				Description: `Name of the node: 
+				Name must include lowercase alphanumeric characters and must start and end with an lowercase alphanumeric character.
+				Dash (-) and dot (.) characters are allowed as delimiters. Maximum length of 60 characters.`,
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"description": &schema.Schema{
+				Description: "Describe the node. For example, the main purpose or use case of the node.",
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"serial_number": &schema.Schema{
+				Description: "Node serial number. Any alpha characters must be in all capitals.",
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
@@ -56,16 +61,20 @@ func resourceNode() *schema.Resource {
 				},
 			},
 			"service_domain_id": {
+				Description: "Id of the service domain to which this node belongs",
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 			"is_bootstrap_master": {
+				Description: "Default setting is true. Set to false indicates this node is not a bootstrap master.",
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
 			"role": {
+				Description: `Set the role as master or worker. Default setting is true to enable the role as master as well as worker. 
+				Set to false to disable a role.`,
 				Type:     schema.TypeList,
 				Required: true,
 				MaxItems: 1,
@@ -83,27 +92,33 @@ func resourceNode() *schema.Resource {
 				},
 			},
 			"gateway": {
+				Description: "Gateway IPv4 address for this node",
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsIPAddress,
 			},
 			"ip_address": {
+				Description: "IPv4 address of this node",
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: validation.IsIPAddress,
 			},
 			"subnet": {
+				Description: "Subnet mask for this node",
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsIPAddress,
 			},
 			"wait_for_onboarding": {
+				Description: `Default setting is false and the terraform provider does not wait for the node to be onboarded. 
+				Set to true indicates that the terraform provider waits for the node to be onboarded.`,
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
 			},
 			"wait_timeout_minutes": {
+				Description: "Wait timeout in minutes",
 				Type:         schema.TypeInt,
 				Optional:     true,
 				Default:      DEFAULTWAITTIMEOUT,

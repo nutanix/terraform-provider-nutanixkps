@@ -24,21 +24,25 @@ func resourceServiceBinding() *schema.Resource {
 		DeleteContext: resourceServiceBindingDelete,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
+				Description: "Name of the Service Binding. Maximum length of 200 characters.",
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 			"bind_resource": {
+				Description: "The resource, service domain or project, to which the service class will be bound",
 				Type:     schema.TypeList,
 				Required: true,
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"id": {
+							Description: "ID of the resource, either a service domain or a project",
 							Type:     schema.TypeString,
 							Required: true,
 						},
 						"type": {
+							Description: "Valid values for this field are: 'SERVICEDOMAIN' or 'PROJECT'",
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringInSlice(getSupportedServiceClassScopeTypes(), false),
@@ -47,6 +51,9 @@ func resourceServiceBinding() *schema.Resource {
 				},
 			},
 			"service_class_id": &schema.Schema{
+				Description: `Service class ID of the service you want to bind. 
+				For example, ID of the AI Inferencing or the Istio service. 
+				You can obtain service class IDs by querying the ServiceClass resource.`,
 				Type:     schema.TypeString,
 				Required: true,
 			},

@@ -17,13 +17,16 @@ description: |-
 
 ### Required
 
-- **name** (String)
-- **project_id** (String)
-- **service_class_id** (String)
+- **name** (String) Name of the service instance: Maximum length of 200 characters.
+- **project_id** (String) ID of the project to which this service instance belongs.
+- **service_class_id** (String) Service class ID of the service you want to bind.
+				For example, ID of the AI Inferencing or the Istio service.
+				You can obtain service class IDs by querying the ServiceClass resource.
 
 ### Optional
 
-- **description** (String)
+- **description** (String) Describe the service instance. For example, the main purpose or use case of the service instance.
+				Maximum length of 200 charachters.
 - **id** (String) The ID of this resource.
 
 
