@@ -17,19 +17,22 @@ description: |-
 
 ### Required
 
-- **edge_ids** (List of String)
-- **helm_chart_filename** (String)
-- **name** (String)
-- **project_id** (String)
+- **edge_ids** (List of String) List of service domain and / or node IDs which are part of this application. 
+				Even if you want to add a single ID, use square brackets. For example, [ '<svc domain id>' ]
+- **helm_chart_filename** (String) TGZ file name with path for the Helm chart for this application
+- **name** (String) Name of the application:
+				Name must include lowercase alphanumeric characters and must start and end with an lowercase alphanumeric character.
+				Dash (-) and dot (.) characters are allowed as delimiters. Maximum length of 200 characters.
+- **project_id** (String) Id of the project to which this application belongs
 
 ### Optional
 
-- **description** (String)
-- **helm_values_filename** (String)
+- **description** (String) Description of the application. For example, describe the application's purpose.
+- **helm_values_filename** (String) Values yaml file name with path
 - **id** (String) The ID of this resource.
 
 ### Read-only
 
-- **tenant_id** (String)
+- **tenant_id** (String) Id of the tenant to which this application belongs
 
 

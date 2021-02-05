@@ -17,9 +17,11 @@ description: |-
 
 ### Required
 
-- **bind_resource** (Block List, Min: 1, Max: 1) (see [below for nested schema](#nestedblock--bind_resource))
-- **name** (String)
-- **service_class_id** (String)
+- **bind_resource** (Block List, Min: 1, Max: 1) The resource, service domain or project, to which the service class will be bound (see [below for nested schema](#nestedblock--bind_resource))
+- **name** (String) Name of the Service Binding. Maximum length of 200 characters.
+- **service_class_id** (String) Service class ID of the service you want to bind. 
+				For example, ID of the AI Inferencing or the Istio service. 
+				You can obtain service class IDs by querying the ServiceClass resource.
 
 ### Optional
 
@@ -30,7 +32,7 @@ description: |-
 
 Required:
 
-- **id** (String) The ID of this resource.
-- **type** (String)
+- **id** (String) ID of the resource, either a service domain or a project
+- **type** (String) Valid values for this field are: 'SERVICEDOMAIN' or 'PROJECT'
 
 

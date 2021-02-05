@@ -17,31 +17,40 @@ description: |-
 
 ### Required
 
-- **is_default** (Boolean)
-- **name** (String)
-- **nutanix_volumes_config** (Block List, Min: 1, Max: 1) (see [below for nested schema](#nestedblock--nutanix_volumes_config))
-- **service_domain_id** (String)
+- **is_default** (Boolean) Default setting is true.
+				Set to false indicates this storage profile is not the default profile for the service domain.
+- **name** (String) Name of the service instance: Maximum length of 200 characters.
+- **nutanix_volumes_config** (Block List, Min: 1, Max: 1) Configuration for the Nutanix AOS cluster storage which uses Nutanix Volumes as the backend storage for this profile. (see [below for nested schema](#nestedblock--nutanix_volumes_config))
+- **service_domain_id** (String) ID of the Service Domain to which this Storage Profile belongs.
 
 ### Optional
 
 - **id** (String) The ID of this resource.
-- **type** (String)
+- **type** (String) Type of the Storage Profile, auto-computed. No input required for this field.
 
 <a id="nestedblock--nutanix_volumes_config"></a>
 ### Nested Schema for `nutanix_volumes_config`
 
 Required:
 
-- **data_services_ip** (String)
-- **prism_element_cluster_vip** (String)
-- **prism_element_password** (String, Sensitive)
-- **prism_element_storage_container_name** (String)
-- **prism_element_username** (String)
+- **data_services_ip** (String) IPv4 data services address used by Nutanix Volumes.
+							Nutanix Volumes is a load-balanced iSCSI target storage feature of AOS.
+							You can obtain this field value by logging in to the Nutanix Prism console.
+							In the Prism web console, see Cluster Details to get the cluster data services IP address.
+- **prism_element_cluster_vip** (String) This field sets a logical IP address for the cluster.
+							You can obtain this field value by logging in to the Nutanix Prism console. 
+							In the Prism web console, see Cluster Details to get the cluster virtual IP address.
+- **prism_element_password** (String, Sensitive) Password for the Prism element cluster.
+							You can obtain the credentials by contacting your Prism Element cluster administrator if you don't have them already.
+- **prism_element_storage_container_name** (String) Name of the storage container: The maximum length is 75 characters.
+							Allowed characters are uppercase and lowercase standard Latin letters (A-Z and a-z), Simplified Chinese, decimal digits (0-9), dots (.), hyphens (-), and underscores (_).
+- **prism_element_username** (String) User name for the Prism element cluster.
+							You can obtain the credentials by contacting your Prism Element cluster administrator if you don't have them already.
 
 Optional:
 
-- **data_services_port** (Number)
+- **data_services_port** (Number) Data services default port 3260.
 - **flash_mode** (Boolean)
-- **prism_element_cluster_port** (Number)
+- **prism_element_cluster_port** (Number) Prism Element cluster default port 9440.
 
 

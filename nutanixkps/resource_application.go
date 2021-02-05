@@ -26,19 +26,26 @@ func resourceApplication() *schema.Resource {
 		DeleteContext: resourceApplicationDelete,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
+				Description: `Name of the application:
+				Name must include lowercase alphanumeric characters and must start and end with an lowercase alphanumeric character.
+				Dash (-) and dot (.) characters are allowed as delimiters. Maximum length of 200 characters.`,
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 			"description": &schema.Schema{
+				Description: "Description of the application. For example, describe the application's purpose.",
 				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"project_id": &schema.Schema{
+				Description: "Id of the project to which this application belongs",
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"edge_ids": {
+				Description: `List of service domain and / or node IDs which are part of this application. 
+				Even if you want to add a single ID, use square brackets. For example, [ '<svc domain id>' ]`,
 				Required: true,
 				Type:     schema.TypeList,
 				Elem: &schema.Schema{
@@ -46,14 +53,17 @@ func resourceApplication() *schema.Resource {
 				},
 			},
 			"helm_chart_filename": &schema.Schema{
+				Description: "TGZ file name with path for the Helm chart for this application",
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"helm_values_filename": &schema.Schema{
+				Description: "Values yaml file name with path",
 				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"tenant_id": &schema.Schema{
+				Description: "Id of the tenant to which this application belongs",
 				Type:     schema.TypeString,
 				Computed: true,
 			},

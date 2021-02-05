@@ -17,24 +17,29 @@ description: |-
 
 ### Required
 
-- **edge_ids** (List of String)
-- **name** (String)
-- **user** (Block List, Min: 1) (see [below for nested schema](#nestedblock--user))
+- **edge_ids** (List of String) List of service domain and / or node IDs which are part of this project. 
+				Even if you want to add a single ID, use square brackets. For example, [ '<svc domain id>' ]
+- **name** (String) Name of the project: Maximum length of 200 characters.
+- **user** (Block List, Min: 1) List of users who can access this project (see [below for nested schema](#nestedblock--user))
 
 ### Optional
 
-- **description** (String)
-- **edge_selector_type** (String)
+- **description** (String) Describe the project. For example, the main purpose or use case of the project.
+				Maximum length of 200 characters.
+- **edge_selector_type** (String) Type for selecting nodes / service domains belonging to this project. 
+				Valid values for this field are: 'Category' or 'Explicit'.
+				Currently the terraform provider supports only Explicit mode.
 - **id** (String) The ID of this resource.
-- **privileged** (Boolean)
-- **tenant_id** (String)
+- **privileged** (Boolean) Default setting is false. 
+				Set to true indicates that the project can run with elevated privileges
+- **tenant_id** (String) Id of the tenant to which this application belongs
 
 <a id="nestedblock--user"></a>
 ### Nested Schema for `user`
 
 Required:
 
-- **role** (String)
-- **user_id** (String)
+- **role** (String) Valid values for Role are: PROJECT_ADMIN, PROJECT_USER
+- **user_id** (String) ID of the user to be added to the project
 
 

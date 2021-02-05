@@ -22,19 +22,26 @@ func resourceServiceInstance() *schema.Resource {
 		DeleteContext: resourceServiceInstanceDelete,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
+				Description: "Name of the service instance: Maximum length of 200 characters.",
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 			"description": &schema.Schema{
+				Description: `Describe the service instance. For example, the main purpose or use case of the service instance.
+				Maximum length of 200 charachters.`,
 				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"project_id": &schema.Schema{
+				Description: "ID of the project to which this service instance belongs.",
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"service_class_id": &schema.Schema{
+				Description: `Service class ID of the service you want to bind.
+				For example, ID of the AI Inferencing or the Istio service.
+				You can obtain service class IDs by querying the ServiceClass resource.`,
 				Type:     schema.TypeString,
 				Required: true,
 			},

@@ -17,21 +17,25 @@ description: |-
 
 ### Required
 
-- **description** (String)
-- **gateway** (String)
-- **ip_address** (String)
-- **name** (String)
-- **role** (Block List, Min: 1, Max: 1) (see [below for nested schema](#nestedblock--role))
-- **serial_number** (String)
-- **service_domain_id** (String)
-- **subnet** (String)
+- **description** (String) Describe the node. For example, the main purpose or use case of the node.
+- **gateway** (String) Gateway IPv4 address for this node
+- **ip_address** (String) IPv4 address of this node
+- **name** (String) Name of the node: 
+				Name must include lowercase alphanumeric characters and must start and end with an lowercase alphanumeric character.
+				Dash (-) and dot (.) characters are allowed as delimiters. Maximum length of 60 characters.
+- **role** (Block List, Min: 1, Max: 1) Set the role as master or worker. Default setting is true to enable the role as master as well as worker. 
+				Set to false to disable a role. (see [below for nested schema](#nestedblock--role))
+- **serial_number** (String) Node serial number. Any alpha characters must be in all capitals.
+- **service_domain_id** (String) Id of the service domain to which this node belongs
+- **subnet** (String) Subnet mask for this node
 
 ### Optional
 
 - **id** (String) The ID of this resource.
-- **is_bootstrap_master** (Boolean)
-- **wait_for_onboarding** (Boolean)
-- **wait_timeout_minutes** (Number)
+- **is_bootstrap_master** (Boolean) Default setting is true. Set to false indicates this node is not a bootstrap master.
+- **wait_for_onboarding** (Boolean) Default setting is false and the terraform provider does not wait for the node to be onboarded. 
+				Set to true indicates that the terraform provider waits for the node to be onboarded.
+- **wait_timeout_minutes** (Number) Wait timeout in minutes
 
 <a id="nestedblock--role"></a>
 ### Nested Schema for `role`

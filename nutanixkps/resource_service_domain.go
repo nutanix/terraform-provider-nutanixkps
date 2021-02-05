@@ -21,19 +21,25 @@ func resourceServiceDomain() *schema.Resource {
 		DeleteContext: resourceServiceDomainDelete,
 		Schema: map[string]*schema.Schema{
 			"last_updated": &schema.Schema{
+				Description: "Last updated timestamp, auto-computed. No input required for this field.",
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
 			"name": &schema.Schema{
+				Description: `Name of the service domain: 
+				Name must include lowercase alphanumeric characters and must start and end with an lowercase alphanumeric character.
+				Dash (-) and dot (.) characters are allowed as delimiters. Maximum length of 60 characters.`,
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"description": &schema.Schema{
+				Description: "Describe the service domain. For example, the main purpose or use case of the service domain.",
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"virtual_ip": &schema.Schema{
+				Description: "Virtual IPv4 address for this Service Domain",
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validation.IsIPAddress,

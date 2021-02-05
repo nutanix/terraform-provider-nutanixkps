@@ -30,24 +30,30 @@ func resourceStorageProfile() *schema.Resource {
 		DeleteContext: resourceStorageProfileDelete,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
+				Description: "Name of the service instance: Maximum length of 200 characters.",
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			"service_domain_id": {
+				Description: "ID of the Service Domain to which this Storage Profile belongs.",
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 			"type": {
+				Description: "Type of the Storage Profile, auto-computed. No input required for this field.",
 				Type:     schema.TypeString,
 				Computed: true,
 				Optional: true,
 			},
 			"is_default": {
+				Description: `Default setting is true.
+				Set to false indicates this storage profile is not the default profile for the service domain.`,
 				Type:     schema.TypeBool,
 				Required: true,
 			},
 			"nutanix_volumes_config": {
+				Description: "Configuration for the Nutanix AOS cluster storage which uses Nutanix Volumes as the backend storage for this profile.",
 				Type:     schema.TypeList,
 				Required: true,
 				MaxItems: 1,
@@ -55,11 +61,16 @@ func resourceStorageProfile() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"data_services_ip": {
+							Description: `IPv4 data services address used by Nutanix Volumes.
+							Nutanix Volumes is a load-balanced iSCSI target storage feature of AOS.
+							You can obtain this field value by logging in to the Nutanix Prism console.
+							In the Prism web console, see Cluster Details to get the cluster data services IP address.`,
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.IsIPAddress,
 						},
 						"data_services_port": {
+							Description: "Data services default port 3260.",
 							Type:         schema.TypeInt,
 							Optional:     true,
 							Default:      3260,
@@ -71,28 +82,38 @@ func resourceStorageProfile() *schema.Resource {
 							Default:  false,
 						},
 						"prism_element_cluster_port": {
+							Description: "Prism Element cluster default port 9440.",
 							Type:         schema.TypeInt,
 							Optional:     true,
 							Default:      9440,
 							ValidateFunc: validation.IntAtLeast(1),
 						},
 						"prism_element_cluster_vip": {
+							Description: `This field sets a logical IP address for the cluster.
+							You can obtain this field value by logging in to the Nutanix Prism console. 
+							In the Prism web console, see Cluster Details to get the cluster virtual IP address.`,
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.IsIPAddress,
 						},
 						"prism_element_password": {
+							Description: `Password for the Prism element cluster.
+							You can obtain the credentials by contacting your Prism Element cluster administrator if you don't have them already.`,
 							Type:        schema.TypeString,
 							Required:    true,
 							Sensitive:   true,
 							DefaultFunc: schema.EnvDefaultFunc("NUTANIX_PE_PASSWORD", nil),
 						},
 						"prism_element_username": {
+							Description: `User name for the Prism element cluster.
+							You can obtain the credentials by contacting your Prism Element cluster administrator if you don't have them already.`,
 							Type:        schema.TypeString,
 							Required:    true,
 							DefaultFunc: schema.EnvDefaultFunc("NUTANIX_PE_USERNAME", nil),
 						},
 						"prism_element_storage_container_name": {
+							Description: `Name of the storage container: The maximum length is 75 characters.
+							Allowed characters are uppercase and lowercase standard Latin letters (A-Z and a-z), Simplified Chinese, decimal digits (0-9), dots (.), hyphens (-), and underscores (_).`,
 							Type:     schema.TypeString,
 							Required: true,
 						},

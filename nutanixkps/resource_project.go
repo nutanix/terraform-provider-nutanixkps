@@ -24,15 +24,20 @@ func resourceProject() *schema.Resource {
 		DeleteContext: resourceProjectDelete,
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
+				Description: "Name of the project: Maximum length of 200 characters.",
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 			"description": &schema.Schema{
+				Description: `Describe the project. For example, the main purpose or use case of the project.
+				Maximum length of 200 characters.`,
 				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"edge_ids": {
+				Description: `List of service domain and / or node IDs which are part of this project. 
+				Even if you want to add a single ID, use square brackets. For example, [ '<svc domain id>' ]`,
 				Required: true,
 				Type:     schema.TypeList,
 				Elem: &schema.Schema{
@@ -40,20 +45,25 @@ func resourceProject() *schema.Resource {
 				},
 			},
 			"privileged": &schema.Schema{
+				Description: `Default setting is false. 
+				Set to true indicates that the project can run with elevated privileges`,
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
 			},
 			"user": {
+				Description: "List of users who can access this project",
 				Type:     schema.TypeList,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"role": {
+							Description: "Valid values for Role are: PROJECT_ADMIN, PROJECT_USER",
 							Type:     schema.TypeString,
 							Required: true,
 						},
 						"user_id": {
+							Description: "ID of the user to be added to the project",
 							Type:     schema.TypeString,
 							Required: true,
 						},
@@ -61,12 +71,16 @@ func resourceProject() *schema.Resource {
 				},
 			},
 			"edge_selector_type": &schema.Schema{
+				Description: `Type for selecting nodes / service domains belonging to this project. 
+				Valid values for this field are: 'Category' or 'Explicit'.
+				Currently the terraform provider supports only Explicit mode.`,
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "Explicit",
 				ValidateFunc: validation.StringInSlice(getSupportedEdgeSelectorTypes(), false),
 			},
 			"tenant_id": &schema.Schema{
+				Description: "Id of the tenant to which this application belongs",
 				Type:     schema.TypeString,
 				Computed: true,
 				Optional: true,
