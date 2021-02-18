@@ -7,9 +7,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"sherlock-terraform-provider-nutanixkps/nutanixkpsclient"
+	"terraform-provider-nutanixkps/nutanixkpsclient"
 
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
 )
 
 func dataSourceServiceClass() *schema.Resource {

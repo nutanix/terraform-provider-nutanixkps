@@ -2,7 +2,7 @@ package nutanixkpsclient
 
 import (
 	"errors"
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
 )
 
 func errorToAPIError(err error) *models.APIErrorPayload {

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"sync"
 
-	cloudmgmt_client "sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client"
+	cloudmgmt_client "terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client"
 
 	httptransport "github.com/go-openapi/runtime/client"
 )

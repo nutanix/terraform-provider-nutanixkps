@@ -3,14 +3,14 @@ package nutanixkpsclient
 import (
 	"fmt"
 	"log"
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client/storage_profile"
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
-	"sherlock-terraform-provider-nutanixkps/utils"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client/storage_profile"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+	"terraform-provider-nutanixkps/utils"
 
 	runtime "github.com/go-openapi/runtime/client"
-) // 	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+) // 	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
 
-// 	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client/auth"
+// 	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client/auth"
 
 // 	runtime "github.com/go-openapi/runtime/client"
 
