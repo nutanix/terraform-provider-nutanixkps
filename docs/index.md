@@ -6,9 +6,14 @@ description: |-
   
 ---
 
-# nutanixkps Provider
+# Terraform Provider for Nutanix KPS
 
+The Terraform Karbon Platform Services provider is a plugin to run the lifecycle management of your KPS resources.
 
+## Quick Starts
+
+- [Github](https://github.com/nutanix/terraform-provider-nutanixkps)
+- [Usage examples](https://github.com/nutanix/karbon-platform-services/tree/master/automation/infrastructure/terraform)
 
 
 
