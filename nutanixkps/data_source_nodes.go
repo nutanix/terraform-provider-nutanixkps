@@ -3,8 +3,8 @@ package nutanixkps
 import (
 	"context"
 	"fmt"
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
-	"sherlock-terraform-provider-nutanixkps/nutanixkpsclient"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+	"terraform-provider-nutanixkps/nutanixkpsclient"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"

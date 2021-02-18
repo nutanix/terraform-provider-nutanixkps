@@ -6,7 +6,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"sherlock-terraform-provider-nutanixkps/nutanixkpsclient"
+	"terraform-provider-nutanixkps/nutanixkpsclient"
 )
 
 // Provider -

@@ -1,10 +1,10 @@
 package nutanixkpsclient
 
 import (
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
 
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client/auth"
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client/service_domain"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client/auth"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/client/service_domain"
 
 	runtime "github.com/go-openapi/runtime/client"
 )

@@ -12,10 +12,10 @@ import (
 
 	// "github.com/hashicorp/terraform/helper/validation"
 
-	"sherlock-terraform-provider-nutanixkps/nutanixkpsclient"
-	"sherlock-terraform-provider-nutanixkps/utils"
+	"terraform-provider-nutanixkps/nutanixkpsclient"
+	"terraform-provider-nutanixkps/utils"
 
-	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
 )
 
 const (
