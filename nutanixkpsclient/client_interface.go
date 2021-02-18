@@ -1,7 +1,7 @@
 package nutanixkpsclient
 
 import (
-	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
 )
 
 type KPSClient interface {
