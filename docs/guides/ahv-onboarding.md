@@ -2,6 +2,10 @@
 page_title: "Onboarding an AHV Service Domain"
 ---
 
+## Onboarding an AHV Service Domain
+
+This guides provides samples on how to onboard an AHV Service Domain to Karbon Platform Services.
+
 ### Provider Setup
 
 Begin by instantiating your `nutanixkps` and `nutanix` providers in terraform. This helps the provider autheticate interactions for each user in regards to our API. Simply enter you MyNutanix credentials to get started. 
