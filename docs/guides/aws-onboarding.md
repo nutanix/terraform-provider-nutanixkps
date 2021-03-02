@@ -189,4 +189,4 @@ module "service_domain" {
 }
 ```
 
-For more information, take a look at our [Github Workshop](https://github.com/nutanix-xi/sherlock-developer/blob/master/automation/infrastructure/terraform/aws/main.tf) on onboarding an AWS Service Domain.
+For more information, take a look at our [Github Workshop](https://github.com/nutanix-xi/sherlock-developer/blob/master/automation/infrastructure/terraform/aws/main.tf) regarding onboarding an AWS Service Domain.

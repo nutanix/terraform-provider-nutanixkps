@@ -108,4 +108,4 @@ module "service_domain" {
 }
 ```
 
-For more information, take a look at our [Github Workshop](https://github.com/nutanix-xi/sherlock-developer/blob/master/automation/infrastructure/terraform/nutanix/main.tf) on onboarding an AHV Service Domain.
+For more information, take a look at our [Github Workshop](https://github.com/nutanix-xi/sherlock-developer/blob/master/automation/infrastructure/terraform/nutanix/main.tf) regarding onboarding an AHV Service Domain.
