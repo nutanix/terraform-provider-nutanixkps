@@ -4,7 +4,7 @@ page_title: "Onboarding an AHV Service Domain"
 
 ### Provider Setup
 
-Begin by instantiating your `nutanixkps` and `nutanix` providers in terraform.
+Begin by instantiating your `nutanixkps` and `nutanix` providers in terraform. This helps the provider autheticate interactions for each user in regards to our API. Simply enter you MyNutanix credentials to get started. 
 
 ```hcl
 provider "nutanixkps" {
@@ -24,13 +24,15 @@ provider "nutanix" {
 
 ### Nutanix QCOW2/Service Domain image
 
-Next create a resource to manage your nutanix image for AHV which you can download from our [Support Portal](https://portal.nutanix.com/page/downloads?product=karbonplatformservices).
+Next create a resource to manage your nutanix image for AHV which you can download from our [Support Portal](https://portal.nutanix.com/page/downloads?product=karbonplatformservices). You can name as well as describe the resource being created. There are two options on how to pass in the downloaded qcow2 image into the resource. The user can either provide a local path or you can use a URI path in which case `source_path` will need to be changed to `source_uri`. 
 
 ```hcl
+data "nutanix_clusters" "clusters" {}
+
 resource "nutanix_image" "kps_servicedomain_image" {
   name        = var.image_config["name"]
   description = var.image_config["description"]
-  source_uri  = var.image_config["source_http"]
+  source_path  = var.image_config["source_path"]
   depends_on = [
     data.nutanix_clusters.clusters
   ]
@@ -39,7 +41,7 @@ resource "nutanix_image" "kps_servicedomain_image" {
 
 ### Nutanix Virtual Machine
 
-The image resource can be used to create a virtual machine which will later be onboarded as a KPS Service Domain.
+The image resource can be used to create a virtual machine which will later be onboarded as a KPS Service Domain. This resouce will allow you to configure attributes of the VM such as number of sockets, vCPUs per socket, and memory size.
 
 ```hcl
 data "nutanix_subnet" "sherlock_net" {
@@ -83,7 +85,7 @@ resource "nutanix_virtual_machine" "kps_servicedomain_instance" {
 
 ### Nutanix KPS Service Domain
 
-Finally leverage Nutanix KPS service domain module which can be found on our [Github](https://github.com/nutanix-xi/sherlock-developer/tree/master/automation/infrastructure/terraform/modules/service_domain) to onboard the recently created VM as service domain.
+Finally leverage Nutanix KPS service domain module which can be found on our [Github](https://github.com/nutanix-xi/sherlock-developer/tree/master/automation/infrastructure/terraform/modules/service_domain) to onboard the recently created VM as service domain. This modules replaces all the configurations you would usually make in the UI as well as provides more detailed configurations such as node info, storage profile info, and others.
 
 ```hcl
 module "service_domain" {
