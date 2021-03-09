@@ -17,6 +17,7 @@ description: |-
 
 ### Required
 
+- **cloud_fqdn** (String) Cloud FQDN for this node
 - **description** (String) Describe the node. For example, the main purpose or use case of the node.
 - **gateway** (String) Gateway IPv4 address for this node
 - **ip_address** (String) IPv4 address of this node

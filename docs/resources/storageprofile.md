@@ -20,13 +20,27 @@ description: |-
 - **is_default** (Boolean) Default setting is true.
 				Set to false indicates this storage profile is not the default profile for the service domain.
 - **name** (String) Name of the service instance: Maximum length of 200 characters.
-- **nutanix_volumes_config** (Block List, Min: 1, Max: 1) Configuration for the Nutanix AOS cluster storage which uses Nutanix Volumes as the backend storage for this profile. (see [below for nested schema](#nestedblock--nutanix_volumes_config))
 - **service_domain_id** (String) ID of the Service Domain to which this Storage Profile belongs.
 
 ### Optional
 
+- **ebs_storage_config** (Block List, Max: 1) Configuration for the EBS type storage profile which uses the AWS EBS volumes as the backend storage for this profile. (see [below for nested schema](#nestedblock--ebs_storage_config))
 - **id** (String) The ID of this resource.
+- **nutanix_volumes_config** (Block List, Max: 1) Configuration for the Nutanix AOS cluster storage which uses Nutanix Volumes as the backend storage for this profile. (see [below for nested schema](#nestedblock--nutanix_volumes_config))
 - **type** (String) Type of the Storage Profile, auto-computed. No input required for this field.
+
+<a id="nestedblock--ebs_storage_config"></a>
+### Nested Schema for `ebs_storage_config`
+
+Required:
+
+- **iops_per_gb** (String) Input / output operations per second, measured in GB
+- **type** (String) Type of the EBS volume. For example, gp2, gp3, io1, io2, st1, sc1
+
+Optional:
+
+- **encrypted** (String) Set to true if the data in the volume should be encrypted. By default this value is false.
+
 
 <a id="nestedblock--nutanix_volumes_config"></a>
 ### Nested Schema for `nutanix_volumes_config`
