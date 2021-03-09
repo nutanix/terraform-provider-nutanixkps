@@ -36,12 +36,12 @@ func resourceServiceBinding() *schema.Resource {
 				MaxItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"id": {
+						"id": &schema.Schema{
 							Description: "ID of the resource, either a service domain or a project",
 							Type:     schema.TypeString,
 							Required: true,
 						},
-						"type": {
+						"type": &schema.Schema{
 							Description: "Valid values for this field are: 'SERVICEDOMAIN' or 'PROJECT'",
 							Type:         schema.TypeString,
 							Required:     true,

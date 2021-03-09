@@ -49,22 +49,21 @@ func (c *Client) NodeCreate(nodeModel *models.Node) (nodeID *string, apiErr *mod
 	return nodeID, nil
 }
 
-//todo
-// // ServiceDomainUpdate - Update a ServiceDomain
-// func (c *Client) ServiceDomainUpdate(svcDomainID string, serviceDomain *models.ServiceDomain) (deletedNodeID *string, apiErr *models.APIErrorPayload) {
-// 	serviceDomainUpdateParams := service_domain.NewServiceDomainUpdateParams()
-// 	serviceDomainUpdateParams.SvcDomainID = svcDomainID
-// 	serviceDomainUpdateParams.Body = serviceDomain
-// 	ok, err := c.CloudmgmtAPIClient.ServiceDomain.ServiceDomainUpdate(serviceDomainUpdateParams, runtime.BearerToken(c.Token))
-// 	if err != nil {
-// 		if apiErr, ok := err.(*service_domain.ServiceDomainUpdateDefault); ok {
-// 			return nil, apiErr.Payload
-// 		}
-// 		return nil, errorToAPIError(err)
-// 	}
-// 	deletedNodeID = ok.Payload.ID
-// 	return deletedNodeID, nil
-// }
+// // NodeUpdate - Update a Node
+func (c *Client) NodeUpdate(nodeID string, nodeModel *models.Node) (nodeIDAfterUpdate *string, apiErr *models.APIErrorPayload) {
+	nodeUpdateParams := node.NewNodeUpdateParams()
+	nodeUpdateParams.NodeID = nodeID
+	nodeUpdateParams.Body = nodeModel
+	ok, err := c.CloudmgmtAPIClient.Node.NodeUpdate(nodeUpdateParams, runtime.BearerToken(c.Token))
+	if err != nil {
+		if apiErr, ok := err.(*node.NodeUpdateDefault); ok {
+			return nil, apiErr.Payload
+		}
+		return nil, errorToAPIError(err)
+	}
+	nodeIDAfterUpdate = ok.Payload.ID
+	return nodeIDAfterUpdate, nil
+}
 
 // NodeDelete - Delete a Node
 func (c *Client) NodeDelete(nodeID string) (deletedNodeID *string, apiErr *models.APIErrorPayload) {
@@ -79,5 +78,4 @@ func (c *Client) NodeDelete(nodeID string) (deletedNodeID *string, apiErr *model
 	}
 	deletedNodeID = ok.Payload.ID
 	return deletedNodeID, nil
-
 }

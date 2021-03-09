@@ -133,8 +133,7 @@ func NodeElementDataSourceMap() map[string]*schema.Schema {
 		},
 		"serial_number": &schema.Schema{
 			Type:     schema.TypeString,
-			Optional: true,
-			Computed: true,
+			Required: true,
 		},
 		"service_domain_id": {
 			Type:     schema.TypeString,

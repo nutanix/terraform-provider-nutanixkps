@@ -53,7 +53,8 @@ func Provider() *schema.Provider {
 			"nutanixkps_serviceclass":   dataSourceServiceClass(),
 			"nutanixkps_serviceclasses": dataSourceServiceClasses(),
 			"nutanixkps_user":           dataSourceUser(),
-			"nutanixkps_users":          dataSourceUsers(),      
+			"nutanixkps_users":          dataSourceUsers(),
+			"nutanixkps_virtual_machine": dataSourceVirtualMachine(), 
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
