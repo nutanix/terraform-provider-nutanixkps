@@ -22,9 +22,9 @@ import (
 
 const (
 	DEFAULTWAITTIMEOUT = 60
-	MINIMUMWAITTIMEOUT = 1
-	WAITMINTIMEOUT     = 10 * time.Second
-	WAITDELAY          = 10 * time.Second
+	MINIMUMWAITTIMEOUT = 10
+	WAITMINTIMEOUT     = 30
+	WAITDELAY          = 60
 	NODEINFOERROR      = "node info error"
 )
 
@@ -34,6 +34,7 @@ func resourceNode() *schema.Resource {
 		ReadContext:   resourceNodeRead,
 		UpdateContext: resourceNodeUpdate,
 		DeleteContext: resourceNodeDelete,
+
 		Schema: map[string]*schema.Schema{
 			"name": &schema.Schema{
 				Description: `Name of the node: 
@@ -52,27 +53,20 @@ func resourceNode() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
-					s := val.(string)
-					if !utils.IsUpper(s) {
-						errs = append(errs, fmt.Errorf("serial_number must be in all caps"))
-					}
-					return
-				},
 			},
-			"service_domain_id": {
+			"service_domain_id": &schema.Schema{
 				Description: "Id of the service domain to which this node belongs",
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"is_bootstrap_master": {
+			"is_bootstrap_master": &schema.Schema{
 				Description: "Default setting is true. Set to false indicates this node is not a bootstrap master.",
 				Type:     schema.TypeBool,
 				Optional: true,
 				Computed: true,
 			},
-			"role": {
+			"role": &schema.Schema{
 				Description: `Set the role as master or worker. Default setting is true to enable the role as master as well as worker. 
 				Set to false to disable a role.`,
 				Type:     schema.TypeList,
@@ -91,38 +85,44 @@ func resourceNode() *schema.Resource {
 					},
 				},
 			},
-			"gateway": {
+			"gateway": &schema.Schema{
 				Description: "Gateway IPv4 address for this node",
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsIPAddress,
 			},
-			"ip_address": {
+			"ip_address": &schema.Schema{
 				Description: "IPv4 address of this node",
 				Type:         schema.TypeString,
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: validation.IsIPAddress,
 			},
-			"subnet": {
+			"subnet": &schema.Schema{
 				Description: "Subnet mask for this node",
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.IsIPAddress,
 			},
-			"wait_for_onboarding": {
+			"wait_for_onboarding": &schema.Schema{
 				Description: `Default setting is false and the terraform provider does not wait for the node to be onboarded. 
 				Set to true indicates that the terraform provider waits for the node to be onboarded.`,
 				Type:     schema.TypeBool,
 				Optional: true,
 				Default:  false,
 			},
-			"wait_timeout_minutes": {
+			"wait_timeout_minutes": &schema.Schema{
 				Description: "Wait timeout in minutes",
 				Type:         schema.TypeInt,
 				Optional:     true,
 				Default:      DEFAULTWAITTIMEOUT,
 				ValidateFunc: validation.IntAtLeast(MINIMUMWAITTIMEOUT),
+			},
+			"cloud_fqdn": &schema.Schema{
+				Description: "Cloud FQDN for this node",
+				Type:         schema.TypeString,
+				Required:     true,
+				ForceNew:     true,
 			},
 		},
 	}
@@ -167,7 +167,7 @@ func resourceNodeCreate(ctx context.Context, d *schema.ResourceData, m interface
 	if waitForOnboarding {
 		err := WaitForNodeOnboarding(client, int64(waitTimeoutMinutes), *nodeID)
 		if err != nil {
-			return diag.Errorf("error occured while waiting for onboarding of node %s: %s", nodeName, err)
+			return diag.Errorf("An error occured while waiting for onboarding of node %s.: %s.", nodeName, err)
 		}
 	}
 	d.SetId(*nodeID)
@@ -176,8 +176,39 @@ func resourceNodeCreate(ctx context.Context, d *schema.ResourceData, m interface
 }
 
 func resourceNodeUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
-	//todo
+	log.Print("[Debug] Entering resourceNodeUpdate")
+	client := m.(*nutanixkpsclient.Client)
+	nodeId := d.Id()
+	nodeName := d.Get("name").(string)
+	nodeDescription := d.Get("description").(string)
+	nodeGateway := d.Get("gateway").(string)
+	nodeIPAddress := d.Get("ip_address").(string)
+	nodeIsBootstrapMaster := d.Get("is_bootstrap_master").(bool)
+	nodeSerialNumber := d.Get("serial_number").(string)
+	nodeSubnet := d.Get("subnet").(string)
+	nodeServiceDomainID := d.Get("service_domain_id").(string)
+	nodeRole := d.Get("role").([]interface{})
+	expandedNodeRole, err := expandNodeRole(nodeRole)
+	if err != nil {
+		return diag.Errorf("error occured while expanding role for node %s: %s", nodeName, err)
+	}
 
+	node := &models.Node{}
+	node.ID = nodeId
+	node.Description = nodeDescription
+	node.Gateway = &nodeGateway
+	node.IPAddress = &nodeIPAddress
+	node.IsBootstrapMaster = nodeIsBootstrapMaster
+	node.Name = &nodeName
+	node.SerialNumber = &nodeSerialNumber
+	node.Subnet = &nodeSubnet
+	node.SvcDomainID = &nodeServiceDomainID
+	node.Role = expandedNodeRole
+	nodeIdAfterUpdate, updateErr := client.NodeUpdate(nodeId, node)
+	if updateErr != nil {
+		return diag.Errorf("An error occured while updating node %s: %s", nodeName, nutanixkpsclient.APIErrorToError(updateErr))
+	}
+	d.SetId(*nodeIdAfterUpdate)
 	return resourceNodeRead(ctx, d, m)
 }
 
@@ -213,9 +244,9 @@ func resourceNodeRead(ctx context.Context, d *schema.ResourceData, m interface{}
 	if err := d.Set("is_bootstrap_master", node.IsBootstrapMaster); err != nil {
 		return diag.Errorf("failed to set attribute is_bootstrap_master for node %s", d.Id())
 	}
-	if err := d.Set("serial_number", node.SerialNumber); err != nil {
-		return diag.Errorf("failed to set attribute serial_number for node %s", d.Id())
-	}
+	// if err := d.Set("serial_number", node.SerialNumber); err != nil {
+	// 	return diag.Errorf("failed to set attribute serial_number for node %s", d.Id())
+	// }
 	if err := d.Set("subnet", node.Subnet); err != nil {
 		return diag.Errorf("failed to set attribute subnet for node %s", d.Id())
 	}
@@ -280,18 +311,17 @@ func flattenNodeRole(nodeRole *models.NodeRole) ([]map[string]interface{}, error
 }
 
 func WaitForNodeOnboarding(client *nutanixkpsclient.Client, waitTimeoutMinutes int64, nodeUUID string) error {
-	log.Printf("Starting wait for node: %s", nodeUUID)
+	log.Printf("Starting wait for node**************: %s", nodeUUID)
 	stateConf := &resource.StateChangeConf{
-		Pending:    []string{"ONBOARDING", "ONBOARDED"},
-		Target:     []string{"HEALTHY"},
+		Pending:    []string{"ONBOARDING"},
+		Target:     []string{"ONBOARDED", "HEALTHY"},
 		Refresh:    onboardingStateRefreshFunc(client, nodeUUID),
 		Timeout:    time.Duration(waitTimeoutMinutes) * time.Minute,
-		Delay:      WAITDELAY,
-		MinTimeout: WAITMINTIMEOUT,
+		Delay:      WAITDELAY * time.Second,
 	}
 
 	if _, errWaitTask := stateConf.WaitForState(); errWaitTask != nil {
-		return fmt.Errorf("error waiting for karbon cluster to create: %s", errWaitTask)
+		return fmt.Errorf("Error waiting for nodes to be onboarded: %s", errWaitTask)
 	}
 	log.Printf("Ending wait for node: %s", nodeUUID)
 	return nil
@@ -321,3 +351,4 @@ func onboardingStateRefreshFunc(client *nutanixkpsclient.Client, nodeUUID string
 		return ni, state, nil
 	}
 }
+

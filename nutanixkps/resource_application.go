@@ -43,7 +43,7 @@ func resourceApplication() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"edge_ids": {
+			"edge_ids": &schema.Schema{
 				Description: `List of service domain and / or node IDs which are part of this application. 
 				Even if you want to add a single ID, use square brackets. For example, [ '<svc domain id>' ]`,
 				Required: true,

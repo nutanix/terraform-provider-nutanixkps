@@ -35,7 +35,7 @@ func resourceProject() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"edge_ids": {
+			"edge_ids": &schema.Schema{
 				Description: `List of service domain and / or node IDs which are part of this project. 
 				Even if you want to add a single ID, use square brackets. For example, [ '<svc domain id>' ]`,
 				Required: true,
@@ -51,7 +51,7 @@ func resourceProject() *schema.Resource {
 				Optional: true,
 				Default:  false,
 			},
-			"user": {
+			"user": &schema.Schema{
 				Description: "List of users who can access this project",
 				Type:     schema.TypeList,
 				Required: true,

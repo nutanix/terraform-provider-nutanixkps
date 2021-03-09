@@ -20,6 +20,7 @@ import (
 
 const (
 	NUTANIXVOLUMESTYPE = "NutanixVolumes"
+	EBSVOLUMESTYPE = "EBS"
 )
 
 func resourceStorageProfile() *schema.Resource {
@@ -34,28 +35,28 @@ func resourceStorageProfile() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"service_domain_id": {
+			"service_domain_id": &schema.Schema{
 				Description: "ID of the Service Domain to which this Storage Profile belongs.",
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
-			"type": {
+			"type": &schema.Schema{
 				Description: "Type of the Storage Profile, auto-computed. No input required for this field.",
 				Type:     schema.TypeString,
 				Computed: true,
 				Optional: true,
 			},
-			"is_default": {
+			"is_default": &schema.Schema{
 				Description: `Default setting is true.
 				Set to false indicates this storage profile is not the default profile for the service domain.`,
 				Type:     schema.TypeBool,
 				Required: true,
 			},
-			"nutanix_volumes_config": {
+			"nutanix_volumes_config": &schema.Schema{
 				Description: "Configuration for the Nutanix AOS cluster storage which uses Nutanix Volumes as the backend storage for this profile.",
 				Type:     schema.TypeList,
-				Required: true,
+				Optional: true,
 				MaxItems: 1,
 				// ConflictsWith: []string{"active_passive_config", "single_master_config"},
 				Elem: &schema.Resource{
@@ -69,26 +70,26 @@ func resourceStorageProfile() *schema.Resource {
 							Required:     true,
 							ValidateFunc: validation.IsIPAddress,
 						},
-						"data_services_port": {
+						"data_services_port": &schema.Schema{
 							Description: "Data services default port 3260.",
 							Type:         schema.TypeInt,
 							Optional:     true,
 							Default:      3260,
 							ValidateFunc: validation.IntAtLeast(1),
 						},
-						"flash_mode": {
+						"flash_mode": &schema.Schema{
 							Type:     schema.TypeBool,
 							Optional: true,
 							Default:  false,
 						},
-						"prism_element_cluster_port": {
+						"prism_element_cluster_port": &schema.Schema{
 							Description: "Prism Element cluster default port 9440.",
 							Type:         schema.TypeInt,
 							Optional:     true,
 							Default:      9440,
 							ValidateFunc: validation.IntAtLeast(1),
 						},
-						"prism_element_cluster_vip": {
+						"prism_element_cluster_vip": &schema.Schema{
 							Description: `This field sets a logical IP address for the cluster.
 							You can obtain this field value by logging in to the Nutanix Prism console. 
 							In the Prism web console, see Cluster Details to get the cluster virtual IP address.`,
@@ -96,7 +97,7 @@ func resourceStorageProfile() *schema.Resource {
 							Required:     true,
 							ValidateFunc: validation.IsIPAddress,
 						},
-						"prism_element_password": {
+						"prism_element_password": &schema.Schema{
 							Description: `Password for the Prism element cluster.
 							You can obtain the credentials by contacting your Prism Element cluster administrator if you don't have them already.`,
 							Type:        schema.TypeString,
@@ -104,18 +105,44 @@ func resourceStorageProfile() *schema.Resource {
 							Sensitive:   true,
 							DefaultFunc: schema.EnvDefaultFunc("NUTANIX_PE_PASSWORD", nil),
 						},
-						"prism_element_username": {
+						"prism_element_username": &schema.Schema{
 							Description: `User name for the Prism element cluster.
 							You can obtain the credentials by contacting your Prism Element cluster administrator if you don't have them already.`,
 							Type:        schema.TypeString,
 							Required:    true,
 							DefaultFunc: schema.EnvDefaultFunc("NUTANIX_PE_USERNAME", nil),
 						},
-						"prism_element_storage_container_name": {
+						"prism_element_storage_container_name": &schema.Schema{
 							Description: `Name of the storage container: The maximum length is 75 characters.
 							Allowed characters are uppercase and lowercase standard Latin letters (A-Z and a-z), Simplified Chinese, decimal digits (0-9), dots (.), hyphens (-), and underscores (_).`,
 							Type:     schema.TypeString,
 							Required: true,
+						},
+					},
+				},
+			},
+			"ebs_storage_config": &schema.Schema{
+				Description: "Configuration for the EBS type storage profile which uses the AWS EBS volumes as the backend storage for this profile.",
+				Type:     schema.TypeList,
+				Optional: true,
+				MaxItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"encrypted": {
+							Description: "Set to true if the data in the volume should be encrypted. By default this value is false.",
+							Type:         schema.TypeString,
+							Optional:     true,
+							Default:      "false",
+						},
+						"iops_per_gb": {
+							Description: "Input / output operations per second, measured in GB",
+							Type:         schema.TypeString,
+							Required:     true,
+						},
+						"type": {
+							Description: "Type of the EBS volume. For example, gp2, gp3, io1, io2, st1, sc1",
+							Type:         schema.TypeString,
+							Required:     true,
 						},
 					},
 				},
@@ -139,6 +166,7 @@ func resourceStorageProfileCreate(ctx context.Context, d *schema.ResourceData, m
 
 	storageProfileNutanixVolumesConfig, okNutanixVol := d.GetOk("nutanix_volumes_config")
 	if okNutanixVol {
+		log.Print("[DEBUG] Found Nutanix volume configuration")
 		expandedStorageProfileNutanixVolumesConfig, err := expandNutanixVolumeStorageProfile(storageProfileNutanixVolumesConfig.([]interface{}))
 		if err != nil {
 			return diag.FromErr(err)
@@ -146,6 +174,21 @@ func resourceStorageProfileCreate(ctx context.Context, d *schema.ResourceData, m
 		t := NUTANIXVOLUMESTYPE
 		storageProfile.Type = &t
 		storageProfile.NutanixVolumesConfig = expandedStorageProfileNutanixVolumesConfig
+	} else {
+		ebsConfig, okEbsVol := d.GetOk("ebs_storage_config") 
+		if okEbsVol {
+			ebsFieldsMap := ebsConfig.([]interface{})[0].(map[string]interface{})
+			ebsEncrypted := ebsFieldsMap["encrypted"].(string)
+			ebsIopsPerGB := ebsFieldsMap["iops_per_gb"].(string)
+			ebsVolumeType := ebsFieldsMap["type"].(string)
+			expandedEbsConfig := &models.EBSStorageProfileConfig{}
+			expandedEbsConfig.Encrypted = &ebsEncrypted
+			expandedEbsConfig.IOPSPerGB = &ebsIopsPerGB
+			expandedEbsConfig.Type = &ebsVolumeType
+			t := EBSVOLUMESTYPE
+			storageProfile.Type = &t
+			storageProfile.EbsStorageConfig = expandedEbsConfig
+		}
 	}
 
 	utils.PrintToJSON(storageProfile, "to create storageProfile: ")
@@ -156,7 +199,6 @@ func resourceStorageProfileCreate(ctx context.Context, d *schema.ResourceData, m
 
 	d.SetId(*storageProfileID)
 	return resourceStorageProfileRead(ctx, d, m)
-
 }
 
 func resourceStorageProfileUpdate(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
