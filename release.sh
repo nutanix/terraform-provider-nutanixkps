@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Bash strict mode, stop on any error
+set -euo pipefail
+
+# Generate docs 
+tfplugindocs generate
+cp -r guides docs/
+
 version=${1}
 echo ${version}
 if [ -z "${version}" ]
