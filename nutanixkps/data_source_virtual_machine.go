@@ -18,6 +18,7 @@ func dataSourceVirtualMachine() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceVirtualMachineRead,
 		Schema:      VirtualMachineDataSourceMap(),
+		Description: "Describes a Karbon Platform Services Virtual Machine.",
 	}
 }
 

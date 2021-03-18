@@ -68,6 +68,7 @@ func resourceApplication() *schema.Resource {
 				Computed: true,
 			},
 		},
+		Description: "Describes a Karbon Platform Services Kubernetes Application",
 	}
 }
 

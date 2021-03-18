@@ -11,29 +11,40 @@ import (
 
 // Provider -
 func Provider() *schema.Provider {
+
+	descriptions := map[string]string{
+		"host": "Karbon Platform Services endpoint for hosting the Service Domain. ",
+		"username": "Username for the Karbon Platform Services local user account user.",
+		"password": "Password for the Karbon Platform Services local user account user.",
+		"api_token": "API authentication token used during API requests. You can generate API keys in the KPS cloud management console by using the Manage API Keys option.",
+	}
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"host": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("NUTANIX_KPS_HOST", nil),
+				Description: descriptions["host"],
 			},
 			"username": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("NUTANIX_KPS_USERNAME", nil),
+				Description: descriptions["username"],
 			},
 			"password": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("NUTANIX_KPS_PASSWORD", nil),
+				Description: descriptions["password"],
 			},
 			"api_token": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("NUTANIX_KPS_API_TOKEN", nil),
+				Description: descriptions["api_token"],
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{

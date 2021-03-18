@@ -125,6 +125,7 @@ func resourceNode() *schema.Resource {
 				ForceNew:     true,
 			},
 		},
+		Description: "Describes a Karbon Platform Services Service Domain Node. A Service Domain Node is the baremetal/virtual machine that is being managed by Karbon Platform Services.",
 	}
 }
 

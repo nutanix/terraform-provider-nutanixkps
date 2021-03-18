@@ -46,6 +46,7 @@ func resourceServiceInstance() *schema.Resource {
 				Required: true,
 			},
 		},
+		Description: "Describes a Karbon Platform Services Service Instance.",
 	}
 }
 

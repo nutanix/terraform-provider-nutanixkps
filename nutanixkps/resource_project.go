@@ -86,6 +86,7 @@ func resourceProject() *schema.Resource {
 				Optional: true,
 			},
 		},
+		Description: "Describes a Karbon Platform Services Project.",
 	}
 }
 
