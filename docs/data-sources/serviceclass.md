@@ -3,12 +3,12 @@
 page_title: "nutanixkps_serviceclass Data Source - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Service Class.
 ---
 
 # Data Source `nutanixkps_serviceclass`
 
-
+Describes a Karbon Platform Services Service Class.
 
 
 

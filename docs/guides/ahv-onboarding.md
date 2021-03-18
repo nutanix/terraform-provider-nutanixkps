@@ -89,26 +89,69 @@ resource "nutanix_virtual_machine" "kps_servicedomain_instance" {
 
 ### Nutanix KPS Service Domain
 
-Finally leverage Nutanix KPS service domain module which can be found on our [Github](https://github.com/nutanix-xi/sherlock-developer/tree/master/automation/infrastructure/terraform/modules/service_domain) to onboard the recently created VM as service domain. This modules replaces all the configurations you would usually make in the UI as well as provides more detailed configurations such as node info, storage profile info, and others.
+Finally leverage Nutanix KPS service domain resource to onboard the recently created VM as service domain. This modules replaces all the configurations you would usually make in the UI as well as provides more detailed configurations such as node info, storage profile info, and others.
 
 ```hcl
-module "service_domain" {
-  source = "../modules/service_domain"
+resource "nutanixkps_servicedomain" "kps_servicedomain" {
+  name = var.service_domain_info["sd_name"]
+  description = var.service_domain_info["sd_description"]
+  virtual_ip = var.service_domain_info["sd_virtual_ip"]
+}
+
+output "servicedomains" {
+  value = nutanixkps_servicedomain.kps_servicedomain
+}
+
+data "nutanixkps_virtual_machine" "kps_virtual_machine" {
+  count = var.instance_info["instance_count"]
+  public_ip_address =  nutanix_virtual_machine.kps_servicedomain_instance[count.index].nic_list[0].ip_endpoint_list[0].ip
+  cloud_fqdn = var.cloud_info["cloud_fqdn"]
   depends_on = [
     nutanix_virtual_machine.kps_servicedomain_instance
   ]
-  instance_info = var.instance_info
-  cloud_info = var.cloud_info
-  node_info = var.node_info
-  service_domain_info = var.service_domain_info
-  storage_profile_info = var.storage_profile_info
-  kps_servicedomain_instance_details = nutanix_virtual_machine.kps_servicedomain_instance
-  storage_config = var.nutanix_volumes_config
-  create_ebs_storage_profile = 0
-  create_nutanixvolumes_storage_profile = var.create_storage_profile
-  private_instance_ips = nutanix_virtual_machine.kps_servicedomain_instance[*].nic_list[0].ip_endpoint_list[0].ip
-  public_instance_ips = nutanix_virtual_machine.kps_servicedomain_instance[*].nic_list[0].ip_endpoint_list[0].ip
+}
+
+resource "nutanixkps_node" "nodes" {
+  count = var.instance_info["instance_count"]
+  name = "${var.instance_info["instance_name_prefix"]}-${count.index}"
+  description = "Node added to Service Domain through Terraform"
+  service_domain_id = nutanixkps_servicedomain.kps_servicedomain.id
+  serial_number = data.nutanixkps_virtual_machine.kps_virtual_machine[count.index].serial_number
+  ip_address = nutanix_virtual_machine.kps_servicedomain_instance[count.index].nic_list[0].ip_endpoint_list[0].ip
+  gateway = var.node_info["node_gateway"]
+  subnet = var.node_info["node_subnet"]
+  role {
+    master = true
+    worker = true
+  }
   wait_for_onboarding = var.wait_for_onboarding
+  cloud_fqdn = var.cloud_info["cloud_fqdn"]
+  depends_on = [
+    nutanixkps_servicedomain.kps_servicedomain,
+    data.nutanixkps_virtual_machine.kps_virtual_machine
+  ]
+}
+
+resource "nutanixkps_storageprofile" "nutanixvolumes_storage_profile" {
+  // count is used as a boolean here, only effective when creating Nutanix VM based service domain
+  count = var.create_storage_profile
+  name = var.storage_profile_info["name"]
+  service_domain_id = nutanixkps_servicedomain.kps_servicedomain.id
+  is_default = var.storage_profile_info["isDefault"]
+  nutanix_volumes_config {
+    data_services_ip = var.nutanix_volumes_config["dataServicesIP"]
+    data_services_port = var.nutanix_volumes_config["dataServicesPort"]
+    flash_mode = var.nutanix_volumes_config["flashMode"]
+    prism_element_cluster_vip = var.nutanix_volumes_config["prismElementClusterVIP"]
+    prism_element_cluster_port = var.nutanix_volumes_config["prismElementClusterPort"]
+    prism_element_password = var.nutanix_volumes_config["prismElementPassword"]
+    prism_element_username = var.nutanix_volumes_config["prismElementUserName"]
+    prism_element_storage_container_name = var.nutanix_volumes_config["storageContainerName"]
+  }
+
+  depends_on = [
+    nutanixkps_servicedomain.kps_servicedomain
+  ]
 }
 ```
 

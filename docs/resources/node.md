@@ -3,12 +3,12 @@
 page_title: "nutanixkps_node Resource - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Service Domain Node. A Service Domain Node is the baremetal/virtual machine that is being managed by Karbon Platform Services.
 ---
 
 # Resource `nutanixkps_node`
 
-
+Describes a Karbon Platform Services Service Domain Node. A Service Domain Node is the baremetal/virtual machine that is being managed by Karbon Platform Services.
 
 
 
@@ -17,7 +17,6 @@ description: |-
 
 ### Required
 
-- **cloud_fqdn** (String) Cloud FQDN for this node
 - **description** (String) Describe the node. For example, the main purpose or use case of the node.
 - **gateway** (String) Gateway IPv4 address for this node
 - **ip_address** (String) IPv4 address of this node

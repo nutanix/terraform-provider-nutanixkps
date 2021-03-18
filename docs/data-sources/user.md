@@ -3,12 +3,12 @@
 page_title: "nutanixkps_user Data Source - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services User.
 ---
 
 # Data Source `nutanixkps_user`
 
-
+Describes a Karbon Platform Services User.
 
 
 

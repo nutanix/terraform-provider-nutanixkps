@@ -17,7 +17,7 @@ description: |-
 
 ### Optional
 
-- **api_token** (String, Sensitive)
-- **host** (String)
-- **password** (String, Sensitive)
-- **username** (String)
+- **api_token** (String, Sensitive) API authentication token used during API requests. You can generate API keys in the KPS cloud management console by using the Manage API Keys option.
+- **host** (String) Karbon Platform Services endpoint for hosting the Service Domain.
+- **password** (String, Sensitive) Password for the Karbon Platform Services local user account user.
+- **username** (String) Username for the Karbon Platform Services local user account user.
