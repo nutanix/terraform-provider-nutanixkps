@@ -148,6 +148,7 @@ func resourceStorageProfile() *schema.Resource {
 				},
 			},
 		},
+		Description: "Describes a Karbon Platform Services Storage Profile.",
 	}
 }
 

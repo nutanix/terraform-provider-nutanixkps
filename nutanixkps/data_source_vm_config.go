@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"time"
 	"io/ioutil"
-	"strconv"
-	"strings"
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -14,28 +12,20 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
-func dataSourceVirtualMachine() *schema.Resource {
+func dataSourceVMConfig() *schema.Resource {
 	return &schema.Resource{
-		ReadContext: dataSourceVirtualMachineRead,
-		Schema:      VirtualMachineDataSourceMap(),
+		ReadContext: dataSourceVMConfigRead,
+		Schema:      VMConfigDataSourceMap(),
 		Description: "Describes a Karbon Platform Services Virtual Machine.",
 	}
 }
 
-func dataSourceVirtualMachineRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func dataSourceVMConfigRead(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	publicIP, iok := d.GetOk("public_ip_address")
 	if !iok {
 		return diag.Errorf("Please provide public IP address of the virtual machine")
 	}
-	cloudFqdn, cok := d.GetOk("cloud_fqdn")
-	if !cok {
-		return diag.Errorf("Please provide cloud FQDN where this VM is / will be onboarded")
-	}
 	serialNumber, _ := getSerialNumber(publicIP.(string))
-	resp, _ := configureCloudFqdn(publicIP.(string), cloudFqdn.(string))
-	if resp != 0 {
-		return diag.Errorf("Failed to configure cloud FQDN on the virtual machine")
-	}
 	if err := d.Set("serial_number", serialNumber); err != nil {
 		return diag.Errorf("Failed to set attribute serial_number for the virtual machine")
 	}
@@ -43,8 +33,8 @@ func dataSourceVirtualMachineRead(ctx context.Context, d *schema.ResourceData, m
 	return nil
 }
 
-func VirtualMachineDataSourceMap() map[string]*schema.Schema {
-	vmdsm := VirtualMachineElementDataSourceMap()
+func VMConfigDataSourceMap() map[string]*schema.Schema {
+	vmdsm := VMConfigElementDataSourceMap()
 	vmdsm["public_ip_address"] = &schema.Schema{
 		Type:          schema.TypeString,
 		Required:      true,
@@ -53,7 +43,7 @@ func VirtualMachineDataSourceMap() map[string]*schema.Schema {
 	return vmdsm
 }
 
-func VirtualMachineElementDataSourceMap() map[string]*schema.Schema {
+func VMConfigElementDataSourceMap() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"public_ip_address": &schema.Schema{
 			Type:     schema.TypeString,
@@ -64,10 +54,6 @@ func VirtualMachineElementDataSourceMap() map[string]*schema.Schema {
 			Type:     schema.TypeString,
 			Optional: true,
 			Computed: true,
-		},
-		"cloud_fqdn": &schema.Schema{
-			Type:     schema.TypeString,
-			Required: true,
 		},
 	}
 }
@@ -95,31 +81,4 @@ func getSerialNumber(publicIP string) (serialNumber string, err error) {
 		time.Sleep(1000 * time.Millisecond)
 	}
 	return "", nil
-}
-
-// ConfigureCloudFqdn - Configure cloud FQDN on the given node
-func configureCloudFqdn(publicIP string, cloudFqdn string) (respCode int, err error) {
-	configUrl := "http://" + publicIP + ":8080/v1/configure"
-	contentType := "application/json"
-	data := "{ \"CloudMgmtFQDN\": \"" + cloudFqdn + "\" }"
-	stringReader := strings.NewReader(data)
-	var done bool = false
-	for !done {
-		res, err := http.Post(configUrl, contentType, stringReader)
-		if err != nil {
-			log.Printf("Configure Cloud FQDN Error: %s", err)
-		} else {
-			byteRes, parseErr := ioutil.ReadAll(res.Body)
-			res.Body.Close()
-			if parseErr != nil {
-				log.Printf("Configure Cloud FQDN Parse Error: %s", parseErr)
-				return -1, parseErr
-			} else {
-				respCode, _ = strconv.Atoi(string(byteRes))
-				return respCode, nil
-			}
-		}
-		time.Sleep(1000 * time.Millisecond)
-	}
-	return -1, nil
 }

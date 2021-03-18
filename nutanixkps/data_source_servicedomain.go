@@ -39,6 +39,7 @@ func dataSourceServiceDomains() *schema.Resource {
 				},
 			},
 		},
+		Description: "Describes a Nutanix KPS Service Domain.",
 	}
 }
 
