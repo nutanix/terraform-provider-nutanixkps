@@ -8,9 +8,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 
-	"terraform-provider-nutanixkps/nutanixkpsclient"
+	"sherlock-terraform-provider-nutanixkps/nutanixkpsclient"
 
-	"terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
+	"sherlock-terraform-provider-nutanixkps/generated/kps_cloud_api_swagger/models"
 )
 
 func dataSourceNode() *schema.Resource {
