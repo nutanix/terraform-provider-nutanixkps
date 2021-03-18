@@ -55,6 +55,7 @@ func Provider() *schema.Provider {
 			"nutanixkps_project":         resourceProject(),
 			"nutanixkps_serviceinstance": resourceServiceInstance(),
 			"nutanixkps_servicebinding":  resourceServiceBinding(),
+			"nutanixkps_vm_cloud_config": resourceVMCloudConfig(),
       
 		},
 		DataSourcesMap: map[string]*schema.Resource{
@@ -65,7 +66,7 @@ func Provider() *schema.Provider {
 			"nutanixkps_serviceclasses": dataSourceServiceClasses(),
 			"nutanixkps_user":           dataSourceUser(),
 			"nutanixkps_users":          dataSourceUsers(),
-			"nutanixkps_virtual_machine": dataSourceVirtualMachine(), 
+			"nutanixkps_vm_config": dataSourceVMConfig(), 
 		},
 		ConfigureContextFunc: providerConfigure,
 	}
