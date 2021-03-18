@@ -17,6 +17,7 @@ func dataSourceNode() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceNodeRead,
 		Schema:      NodeDataSourceMap(),
+		Description: "Describes a Karbon Platform Services Service Domain Node. A Service Domain Node is the baremetal/virtual machine that is being managed by Karbon Platform Services.",
 	}
 }
 

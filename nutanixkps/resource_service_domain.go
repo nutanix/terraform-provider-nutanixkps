@@ -46,6 +46,7 @@ func resourceServiceDomain() *schema.Resource {
 				ForceNew:     true,
 			},
 		},
+		Description: "Describes a Karbon Platform Services Service Domain.",
 	}
 }
 

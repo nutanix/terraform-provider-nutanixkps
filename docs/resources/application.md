@@ -3,12 +3,12 @@
 page_title: "nutanixkps_application Resource - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Kubernetes Application
 ---
 
 # Resource `nutanixkps_application`
 
-
+Describes a Karbon Platform Services Kubernetes Application
 
 
 

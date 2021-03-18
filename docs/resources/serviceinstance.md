@@ -3,12 +3,12 @@
 page_title: "nutanixkps_serviceinstance Resource - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Service Instance.
 ---
 
 # Resource `nutanixkps_serviceinstance`
 
-
+Describes a Karbon Platform Services Service Instance.
 
 
 

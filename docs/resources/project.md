@@ -3,12 +3,12 @@
 page_title: "nutanixkps_project Resource - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Project.
 ---
 
 # Resource `nutanixkps_project`
 
-
+Describes a Karbon Platform Services Project.
 
 
 

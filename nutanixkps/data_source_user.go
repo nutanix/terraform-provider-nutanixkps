@@ -16,6 +16,7 @@ func dataSourceUser() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceUserRead,
 		Schema:      UserDataSourceMap(),
+		Description: "Describes a Karbon Platform Services User.",
 	}
 }
 

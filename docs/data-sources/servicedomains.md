@@ -3,12 +3,12 @@
 page_title: "nutanixkps_servicedomains Data Source - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Nutanix KPS Service Domain.
 ---
 
 # Data Source `nutanixkps_servicedomains`
 
-
+Describes a Nutanix KPS Service Domain.
 
 
 

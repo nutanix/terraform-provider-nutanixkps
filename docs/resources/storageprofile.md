@@ -3,12 +3,12 @@
 page_title: "nutanixkps_storageprofile Resource - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Storage Profile.
 ---
 
 # Resource `nutanixkps_storageprofile`
 
-
+Describes a Karbon Platform Services Storage Profile.
 
 
 

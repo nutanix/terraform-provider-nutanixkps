@@ -16,6 +16,7 @@ func dataSourceServiceClass() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: dataSourceServiceClassRead,
 		Schema:      ServiceClassDataSourceMap(),
+		Description: "Describes a Karbon Platform Services Service Class.",
 	}
 }
 

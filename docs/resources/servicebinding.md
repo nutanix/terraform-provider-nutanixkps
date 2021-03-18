@@ -3,12 +3,12 @@
 page_title: "nutanixkps_servicebinding Resource - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Service Binding.
 ---
 
 # Resource `nutanixkps_servicebinding`
 
-
+Describes a Karbon Platform Services Service Binding.
 
 
 

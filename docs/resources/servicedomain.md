@@ -3,12 +3,12 @@
 page_title: "nutanixkps_servicedomain Resource - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Service Domain.
 ---
 
 # Resource `nutanixkps_servicedomain`
 
-
+Describes a Karbon Platform Services Service Domain.
 
 
 

@@ -3,12 +3,12 @@
 page_title: "nutanixkps_node Data Source - terraform-provider-nutanixkps"
 subcategory: ""
 description: |-
-  
+  Describes a Karbon Platform Services Service Domain Node. A Service Domain Node is the baremetal/virtual machine that is being managed by Karbon Platform Services.
 ---
 
 # Data Source `nutanixkps_node`
 
-
+Describes a Karbon Platform Services Service Domain Node. A Service Domain Node is the baremetal/virtual machine that is being managed by Karbon Platform Services.
 
 
 

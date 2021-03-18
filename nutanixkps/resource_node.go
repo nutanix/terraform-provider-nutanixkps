@@ -118,13 +118,8 @@ func resourceNode() *schema.Resource {
 				Default:      DEFAULTWAITTIMEOUT,
 				ValidateFunc: validation.IntAtLeast(MINIMUMWAITTIMEOUT),
 			},
-			"cloud_fqdn": &schema.Schema{
-				Description: "Cloud FQDN for this node",
-				Type:         schema.TypeString,
-				Required:     true,
-				ForceNew:     true,
-			},
 		},
+		Description: "Describes a Karbon Platform Services Service Domain Node. A Service Domain Node is the baremetal/virtual machine that is being managed by Karbon Platform Services.",
 	}
 }
 
@@ -244,9 +239,9 @@ func resourceNodeRead(ctx context.Context, d *schema.ResourceData, m interface{}
 	if err := d.Set("is_bootstrap_master", node.IsBootstrapMaster); err != nil {
 		return diag.Errorf("failed to set attribute is_bootstrap_master for node %s", d.Id())
 	}
-	// if err := d.Set("serial_number", node.SerialNumber); err != nil {
-	// 	return diag.Errorf("failed to set attribute serial_number for node %s", d.Id())
-	// }
+	if err := d.Set("serial_number", node.SerialNumber); err != nil {
+		return diag.Errorf("failed to set attribute serial_number for node %s", d.Id())
+	}
 	if err := d.Set("subnet", node.Subnet); err != nil {
 		return diag.Errorf("failed to set attribute subnet for node %s", d.Id())
 	}
@@ -335,9 +330,8 @@ func onboardingStateRefreshFunc(client *nutanixkpsclient.Client, nodeUUID string
 		if err != nil {
 			convErr := nutanixkpsclient.APIErrorToError(err)
 			if strings.Contains(fmt.Sprint(convErr), "is not found") {
-				return ni, NODEINFOERROR, nil
+				return nil, "", convErr
 			}
-			return nil, "", convErr
 		}
 		if ni.Onboarded {
 			state = "ONBOARDED"
