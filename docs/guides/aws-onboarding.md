@@ -231,4 +231,4 @@ resource "nutanixkps_storageprofile" "ebs_storage_profile" {
 }
 ```
 
-For more information, take a look at our [Github Workshop](https://github.com/nutanix-xi/sherlock-developer/blob/master/automation/infrastructure/terraform/aws/main.tf) regarding onboarding an AWS Service Domain.
+For more information, take a look at our [Github Workshop](https://github.com/nutanix/karbon-platform-services/tree/master/automation/infrastructure/terraform) regarding onboarding an AWS Service Domain.
