@@ -52,7 +52,6 @@ func flattenUsers(users []*models.User) ([]map[string]interface{}, error) {
 			"name":      u.Name,
 			"role":      u.Role,
 			"email":     u.Email,
-			"tenant_id": u.TenantID,
 		}
 		flatUsers = append(flatUsers, n)
 	}

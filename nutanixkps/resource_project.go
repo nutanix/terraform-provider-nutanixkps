@@ -79,12 +79,6 @@ func resourceProject() *schema.Resource {
 				Default:      "Explicit",
 				ValidateFunc: validation.StringInSlice(getSupportedEdgeSelectorTypes(), false),
 			},
-			"tenant_id": &schema.Schema{
-				Description: "Id of the tenant to which this application belongs",
-				Type:     schema.TypeString,
-				Computed: true,
-				Optional: true,
-			},
 		},
 		Description: "Describes a Karbon Platform Services Project.",
 	}
@@ -157,9 +151,6 @@ func resourceProjectRead(ctx context.Context, d *schema.ResourceData, m interfac
 	}
 	if err := d.Set("user", flatUsers); err != nil {
 		return diag.Errorf("failed to set attribute user for project %s", d.Id())
-	}
-	if err := d.Set("tenant_id", project.TenantID); err != nil {
-		return diag.Errorf("failed to set attribute tenant_id for project %s", d.Id())
 	}
 	if err := d.Set("privileged", project.Privileged); err != nil {
 		return diag.Errorf("failed to set attribute privileged for project %s", d.Id())

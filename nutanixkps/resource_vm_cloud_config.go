@@ -71,9 +71,9 @@ func resourceVMCloudConfigRead(ctx context.Context, d *schema.ResourceData, m in
 	if !iok {
 		return diag.Errorf("Please provide public IP address of the virtual machine")
 	}
-	// dummy read - since this resource is going to be used for configuring cloud fqdn, never to query the fqdn
-	if err := d.Set("cloud_fqdn", "test.ntnxsherlock.com"); err != nil {
-		return diag.Errorf("failed to set attribute cloud_fqdn for vm_cloud_config %s", d.Id())
+	_, cok := d.GetOk("cloud_fqdn")
+	if !cok {
+		return diag.Errorf("Please provide cloud_fqdn for the virtual machine")
 	}
 	return diags
 }

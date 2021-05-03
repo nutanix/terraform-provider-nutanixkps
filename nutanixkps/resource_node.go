@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"strings"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -21,11 +20,10 @@ import (
 )
 
 const (
-	DEFAULTWAITTIMEOUT = 60
-	MINIMUMWAITTIMEOUT = 10
-	WAITMINTIMEOUT     = 30
-	WAITDELAY          = 60
-	NODEINFOERROR      = "node info error"
+	DEFAULTWAITTIMEOUT  = 60
+	MINIMUMWAITTIMEOUT  = 10
+	INITIALDELAYSECONDS = 60
+	POLLINTERVALSECONDS = 30
 )
 
 func resourceNode() *schema.Resource {
@@ -95,7 +93,6 @@ func resourceNode() *schema.Resource {
 				Description: "IPv4 address of this node",
 				Type:         schema.TypeString,
 				Required:     true,
-				ForceNew:     true,
 				ValidateFunc: validation.IsIPAddress,
 			},
 			"subnet": &schema.Schema{
@@ -308,11 +305,12 @@ func flattenNodeRole(nodeRole *models.NodeRole) ([]map[string]interface{}, error
 func WaitForNodeOnboarding(client *nutanixkpsclient.Client, waitTimeoutMinutes int64, nodeUUID string) error {
 	log.Printf("Starting wait for node**************: %s", nodeUUID)
 	stateConf := &resource.StateChangeConf{
-		Pending:    []string{"ONBOARDING"},
-		Target:     []string{"ONBOARDED", "HEALTHY"},
-		Refresh:    onboardingStateRefreshFunc(client, nodeUUID),
-		Timeout:    time.Duration(waitTimeoutMinutes) * time.Minute,
-		Delay:      WAITDELAY * time.Second,
+		Pending:      []string{"ONBOARDING"},
+		Target:       []string{"ONBOARDED", "HEALTHY"},
+		Refresh:      onboardingStateRefreshFunc(client, nodeUUID),
+		Timeout:      time.Duration(waitTimeoutMinutes) * time.Minute,
+		Delay:        INITIALDELAYSECONDS * time.Second,
+		PollInterval: POLLINTERVALSECONDS * time.Second,
 	}
 
 	if _, errWaitTask := stateConf.WaitForState(); errWaitTask != nil {
@@ -329,9 +327,8 @@ func onboardingStateRefreshFunc(client *nutanixkpsclient.Client, nodeUUID string
 
 		if err != nil {
 			convErr := nutanixkpsclient.APIErrorToError(err)
-			if strings.Contains(fmt.Sprint(convErr), "is not found") {
-				return nil, "", convErr
-			}
+			log.Printf("[OnboardingStateRefreshFunc]: error: %s", convErr)
+			return ni, state, convErr
 		}
 		if ni.Onboarded {
 			state = "ONBOARDED"
