@@ -31,6 +31,5 @@ Read-only:
 - **email** (String)
 - **name** (String)
 - **role** (String)
-- **tenant_id** (String)
 
 

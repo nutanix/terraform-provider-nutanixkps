@@ -32,7 +32,6 @@ Describes a Karbon Platform Services Project.
 - **id** (String) The ID of this resource.
 - **privileged** (Boolean) Default setting is false. 
 				Set to true indicates that the project can run with elevated privileges
-- **tenant_id** (String) Id of the tenant to which this application belongs
 
 <a id="nestedblock--user"></a>
 ### Nested Schema for `user`

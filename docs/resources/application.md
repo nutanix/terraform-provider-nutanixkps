@@ -31,8 +31,4 @@ Describes a Karbon Platform Services Kubernetes Application
 - **helm_values_filename** (String) Values yaml file name with path
 - **id** (String) The ID of this resource.
 
-### Read-only
-
-- **tenant_id** (String) Id of the tenant to which this application belongs
-
 

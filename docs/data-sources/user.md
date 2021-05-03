@@ -21,7 +21,6 @@ Describes a Karbon Platform Services User.
 - **id** (String) The ID of this resource.
 - **name** (String)
 - **role** (String)
-- **tenant_id** (String)
 - **user_id** (String)
 - **user_name** (String)
 
