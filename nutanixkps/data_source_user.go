@@ -54,9 +54,6 @@ func dataSourceUserRead(ctx context.Context, d *schema.ResourceData, m interface
 	if err := d.Set("email", user.Email); err != nil {
 		return diag.Errorf("failed to set attribute email for user %s", d.Id())
 	}
-	if err := d.Set("tenant_id", user.TenantID); err != nil {
-		return diag.Errorf("failed to set attribute tenant_id for user %s", d.Id())
-	}
 	d.SetId(user.ID)
 
 	return nil
@@ -112,11 +109,6 @@ func UserElementDataSourceMap() map[string]*schema.Schema {
 			Computed: true,
 		},
 		"email": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Computed: true,
-		},
-		"tenant_id": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
 			Computed: true,

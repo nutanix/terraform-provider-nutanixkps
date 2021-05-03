@@ -62,11 +62,6 @@ func resourceApplication() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"tenant_id": &schema.Schema{
-				Description: "Id of the tenant to which this application belongs",
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 		},
 		Description: "Describes a Karbon Platform Services Kubernetes Application",
 	}
@@ -136,9 +131,6 @@ func resourceApplicationRead(ctx context.Context, d *schema.ResourceData, m inte
 	}
 	if err := d.Set("description", application.Description); err != nil {
 		return diag.Errorf("failed to set attribute description for application %s", d.Id())
-	}
-	if err := d.Set("tenant_id", application.TenantID); err != nil {
-		return diag.Errorf("failed to set attribute tenant_id for application %s", d.Id())
 	}
 
 	// if err := d.Set("gateway", application.Gateway); err != nil {
